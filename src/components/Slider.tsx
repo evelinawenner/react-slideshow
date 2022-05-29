@@ -3,11 +3,16 @@ import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
+interface IImage {
+  urls: {
+    small: string;
+  };
+}
+
 export const Slider = () => {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<IImage[]>([]);
   const [currImage, setCurrImage] = useState(0);
   const length = images.length;
-
   const timeoutRef = useRef(null);
 
   const getImages = async () => {
@@ -40,13 +45,16 @@ export const Slider = () => {
 
   useEffect(() => {
     resetTimeout();
-    setTimeout(() => nextImage(), 4000);
+    setTimeout(
+      () => setCurrImage(currImage === length - 1 ? 0 : currImage + 1),
+      4000
+    );
 
     return () => {
       resetTimeout();
     };
   }, [currImage]);
-  const imageList = images.map((image: any, index) => {
+  const imageList = images.map((image: IImage, index) => {
     return (
       <div
         key={index}
@@ -62,7 +70,7 @@ export const Slider = () => {
     <section className="slider">
       <MdArrowBackIos className="prev-arrow" onClick={prevImage} />
       <MdArrowForwardIos className="next-arrow" onClick={nextImage} />
-      {imageList}
+      <div>{imageList}</div>
     </section>
   );
 };

@@ -9,7 +9,7 @@ export const HomeStyles = styled.div`
   .slider {
     position: relative;
     z-index: 1;
-    width: 1000px;
+    width: 800px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,13 +17,13 @@ export const HomeStyles = styled.div`
   }
 
   .image {
-    height: 500px;
+    height: 400px;
   }
 
   .prev-arrow {
     position: absolute;
     z-index: 2;
-    top: 50%;
+    top: 45%;
     left: 2rem;
     font-size: 4rem;
     color: #b8d8be;
@@ -33,7 +33,7 @@ export const HomeStyles = styled.div`
   .next-arrow {
     position: absolute;
     z-index: 2;
-    top: 50%;
+    top: 45%;
     right: 2rem;
     font-size: 4rem;
     color: #b8d8be;
@@ -41,8 +41,10 @@ export const HomeStyles = styled.div`
   }
 
   .active-slide {
+    transition: ease 1000ms;
   }
 
   .slide {
+    transition: ease 1000ms;
   }
 `;
