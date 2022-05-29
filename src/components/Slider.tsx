@@ -62,7 +62,7 @@ export const Slider = () => {
     <section className="slider">
       <MdArrowBackIos className="prev-arrow" onClick={prevImage} />
       <MdArrowForwardIos className="next-arrow" onClick={nextImage} />
-      {imageList}
+      <div>{imageList}</div>
     </section>
   );
 };
