@@ -1,9 +1,14 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
+import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
 export const Slider = () => {
   const [images, setImages] = useState([]);
+  const [currImage, setCurrImage] = useState(0);
+  const length = images.length;
+
+  const timeoutRef = useRef(null);
 
   const getImages = async () => {
     let clientId = "eUzQm28A457kQ1rrVWI4DSQxLZZ3edeYnGpr8DKVOz0";
@@ -15,12 +20,49 @@ export const Slider = () => {
     });
   };
 
+  function resetTimeout() {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  }
+
   useEffect(() => {
     getImages();
   }, []);
 
-  const imageList = images.map((image: any) => {
-    return <img src={image?.urls.small} />;
+  const nextImage = () => {
+    setCurrImage(currImage === length - 1 ? 0 : currImage + 1);
+  };
+
+  const prevImage = () => {
+    setCurrImage(currImage === 0 ? length - 1 : currImage - 1);
+  };
+
+  useEffect(() => {
+    resetTimeout();
+    setTimeout(() => nextImage(), 4000);
+
+    return () => {
+      resetTimeout();
+    };
+  }, [currImage]);
+  const imageList = images.map((image: any, index) => {
+    return (
+      <div
+        key={index}
+        className={index === currImage ? "active-slide" : "slide"}
+      >
+        {index === currImage && (
+          <img src={image?.urls.small} alt="" className="image" />
+        )}
+      </div>
+    );
   });
-  return <div>{imageList}</div>;
+  return (
+    <section className="slider">
+      <MdArrowBackIos className="prev-arrow" onClick={prevImage} />
+      <MdArrowForwardIos className="next-arrow" onClick={nextImage} />
+      {imageList}
+    </section>
+  );
 };
