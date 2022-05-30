@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 
@@ -13,7 +13,6 @@ export const Slider = () => {
   const [images, setImages] = useState<IImage[]>([]);
   const [currImage, setCurrImage] = useState(0);
   const length = images.length;
-  const timeoutRef = useRef(null);
 
   const getImages = async () => {
     let clientId = "eUzQm28A457kQ1rrVWI4DSQxLZZ3edeYnGpr8DKVOz0";
@@ -25,16 +24,6 @@ export const Slider = () => {
     });
   };
 
-  function resetTimeout() {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-  }
-
-  useEffect(() => {
-    getImages();
-  }, []);
-
   const nextImage = () => {
     setCurrImage(currImage === length - 1 ? 0 : currImage + 1);
   };
@@ -44,16 +33,23 @@ export const Slider = () => {
   };
 
   useEffect(() => {
-    resetTimeout();
-    setTimeout(
-      () => setCurrImage(currImage === length - 1 ? 0 : currImage + 1),
+    getImages();
+  }, []);
+
+  useEffect(() => {
+    let timeoutID = setTimeout(
+      () =>
+        setCurrImage((prevCurrImage) =>
+          prevCurrImage === length - 1 ? 0 : prevCurrImage + 1
+        ),
       4000
     );
 
     return () => {
-      resetTimeout();
+      clearTimeout(timeoutID);
     };
   }, [currImage]);
+
   const imageList = images.map((image: IImage, index) => {
     return (
       <div
